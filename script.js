@@ -1,10 +1,9 @@
-//your code here
 $(document).ready(function () {
   let currentPage = 1;
 
-  function loadIssues(page) {
+  function loadIssues() {
     $.get(
-      `https://api.github.com/repositories/1296269/issues?page=${page}&per_page=5`,
+      `https://api.github.com/repositories/1296269/issues?page=${currentPage}&per_page=5`,
       function (issues) {
         const issueList = $("#issue-list");
         issueList.empty();
@@ -17,17 +16,15 @@ $(document).ready(function () {
 
   $("#load-next").click(function () {
     currentPage++;
-    $("#page-number").text(`Page number ${currentPage}`);
-    loadIssues(currentPage);
+    loadIssues();
   });
 
   $("#load-prev").click(function () {
     if (currentPage > 1) {
       currentPage--;
-      $("#page-number").text(`Page number ${currentPage}`);
-      loadIssues(currentPage);
+      loadIssues();
     }
   });
 
-  loadIssues(currentPage);
+  loadIssues();
 });
