@@ -1,30 +1,50 @@
-$(document).ready(function () {
-  let currentPage = 1;
+//your code here
+let ol = document.getElementById('oll');
 
-  function loadIssues() {
-    $.get(
-      `https://api.github.com/repositories/1296269/issues?page=${currentPage}&per_page=5`,
-      function (issues) {
-        const issueList = $("#issue-list");
-        issueList.empty();
-        issues.forEach(function (issue) {
-          issueList.append(`<li>${issue.title}</li>`);
-        });
-      }
-    );
-  }
+fetch("https://api.github.com/repositories/1296269/issues?page=${1}&per_page=5.")
+    .then((response) => response.json())
+    .then((product) => {
+        document.getElementById('page_number').innerHTML = `Page Number 1`;
+        for (let i = 0; i < 5; i++) {
+            const element = product[i];
+            console.log(product[i].title);
+            ol.innerHTML += `<li>${product[i].title}</li>`
+        }
+    })
 
-  $("#load-next").click(function () {
-    currentPage++;
-    loadIssues();
-  });
+let i = 1;
 
-  $("#load-prev").click(function () {
-    if (currentPage > 1) {
-      currentPage--;
-      loadIssues();
-    }
-  });
+let next = document.getElementById('load_next');
+let prev = document.getElementById('load_prev');
 
-  loadIssues();
-});
+next.addEventListener('click', () => {
+    i = i + 1;
+    fetch(`https://api.github.com/repositories/1296269/issues?page=${i}&per_page=5.`)
+        .then((response) => response.json())
+        .then((product) => {
+            document.getElementById('page_number').innerHTML = `Page Number ${i}`;
+            ol.innerHTML = '';
+            for (let z = 0; z < 5; z++) {
+                const element = product[z];
+                console.log(product[z].title);
+                ol.innerHTML += `<li>${product[z].title}</li>`
+            }
+        })
+})
+
+prev.addEventListener('click', () => {
+    if (i === 1) i = 1;
+    else i = i - 1;
+    fetch(`https://api.github.com/repositories/1296269/issues?page=${i}&per_page=5.`)
+        .then((response) => response.json())
+        .then((product) => {
+            document.getElementById('page_number').innerHTML = `Page Number ${i}`;
+            ol.innerHTML = '';
+            for (let z = 0; z < 5; z++) {
+                const element = product[z];
+                console.log(product[z].title);
+                ol.innerHTML += `<li>${product[z].title}</li>`
+                console.log(ol.innerHTML);
+            }
+        })
+})
